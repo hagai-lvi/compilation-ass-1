@@ -43,22 +43,28 @@
  					(*caten 3)
  					(*pack-with
  					(lambda ( < e >) e))
- 					done
- 					)
-
- 		)
-
- ))
+ 					done  ))))
 
 
 (define <left-bracket>
 	(new (*parser (char #\{  ))
 	done))
 
-
 (define <right-bracket>
 	(new (*parser (char #\}  ))
 	done))
 
+
+;(define <white-space>
+;	(new	<any-char>
+;			(*guard (lambda (c) (char-whitespace? c)))
+;			(*pack (lambda (_) "@"))
+;	done))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;      EXPERIEMNTS       ;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define x (^<wrap> <left-bracket> <right-bracket>))
 (define y (x <nat>))
