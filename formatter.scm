@@ -53,13 +53,11 @@
 
 (define <left-bracket>
 	(new (*parser (char #\{  ))
-		 (*pack (lambda (_) "{" ))
 	done))
 
 
 (define <right-bracket>
 	(new (*parser (char #\}  ))
-		 (*pack (lambda (_) "}" ))
 	done))
 
 (define x (^<wrap> <left-bracket> <right-bracket>))
