@@ -55,12 +55,17 @@
 	done))
 
 
-;(define <white-space>
-;	(new	<any-char>
-;			(*guard (lambda (c) (char-whitespace? c)))
-;			(*pack (lambda (_) "@"))
-;	done))
+(define <white-space>
+	(new	(*parser <any-char>)
+			(*guard (lambda (c) (char-whitespace? c)))
+			(*pack (lambda (_) #\@ ))
+	done))
 
+(define <white-spaces>
+	(new	
+			(*parser <white-space>)
+			*star
+	done))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -68,3 +73,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define x (^<wrap> <left-bracket> <right-bracket>))
 (define y (x <nat>))
+
+
+
+
+
+
+
+
+
+
