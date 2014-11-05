@@ -58,7 +58,7 @@
 (define <white-space>
 	(new	(*parser <any-char>)
 			(*guard (lambda (c) (char-whitespace? c)))
-			(*pack (lambda (_) #\@ ))
+			;(*pack (lambda (_) #\@ ))
 	done))
 
 (define <white-spaces>
@@ -73,6 +73,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define x (^<wrap> <left-bracket> <right-bracket>))
 (define y (x <nat>))
+
+;Test for <white-space>
+(<white-space> (string->list "   ")
+	(lambda (x y)	;success
+		`(match: ,x left: ,y))
+	(lambda(x)		;fail
+		'fail))
+
+
+
+
+
+
 
 
 
