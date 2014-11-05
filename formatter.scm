@@ -109,13 +109,34 @@
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;string defenition;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define <white>
+(const (lambda(ch)
+	(char-whitespace? ch))))
 
 
+(define <string-new>
+(new (*parser <any-char>)
+	(*parser <white>)
+	(*parser (char #\}))
+	(*disj 2)
+	*diff	
+	*star
+	
+	(*pack (lambda(ch)(list->string ch)))
+	
+	done))
 
 
-
-
-
+(define <sym>
+((^<wrap> (char #\{)(char #\}))
+((^<wrap> (star <white>)(star <white>))
+<string-new>)))
 
 
 
