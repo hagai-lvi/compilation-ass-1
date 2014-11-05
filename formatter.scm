@@ -55,19 +55,39 @@
 	done))
 
 
+; consumes a single white-space
 (define <white-space>
 	(new	(*parser <any-char>)
 			(*guard (lambda (c) (char-whitespace? c)))
 			;(*pack (lambda (_) #\@ ))
 	done))
 
+; consumes many white-spaces
 (define <white-spaces>
 	(new	
 			(*parser <white-space>)
 			*star
 	done))
 
+; waits for a new parser, and consumes spaces from around that parser
+; example:
+; (<wrapped-in-spaces> <nat>) gets "   \t \n   123   \t   " and returns 123 
+(define <wrapped-in-spaces>
+	(^<wrap> <white-spaces> <white-spaces>))
 
+
+; waits for a new parser, and curly brackets from around that parser
+; example:
+; (<wrapped-in-brackets> <nat>) gets "{123}" and returns 123 
+(define <wrapped-in-brackets>
+	(^<wrap> <left-bracket> <right-bracket>))
+
+;That's a lousy name!
+; isolates natural-numbers from { \t   123    \n}
+; example:
+; (test-string <nat-wrapped-in-spaces-and-brackets> "{   1   }") returns 1
+(define <nat-wrapped-in-spaces-and-brackets>
+	(<wrapped-in-brackets> (<wrapped-in-spaces>  <nat>)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;      EXPERIEMNTS       ;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
