@@ -137,7 +137,13 @@
 ((^<wrap> (char #\{)(char #\}))
 ((^<wrap> (star <white>)(star <white>))
 <string-new>)))
-
+;test (<sen> "{day-of-week}" `((day-of-week "Friday")(day-of month "never")))
+(define <sen>
+(lambda(string-l l)
+(<sym> (string->list string-l)
+ (lambda (e s)
+	      (cadr (assoc (string->symbol e) l)))
+	    (lambda (w) `(failed with report: ,@w)))))
 
 
 
