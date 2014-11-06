@@ -138,6 +138,32 @@
 ((^<wrap> (star <white>)(star <white>))
 <string-new>)))
 ;test (<sen> "{day-of-week}" `((day-of-week "Friday")(day-of month "never")))
+
+(define <comment-string>
+(new (*parser <any-char>)
+	 (*parser (word "}}"))
+	 (*parser (word "{{"))
+	 (*disj 2)
+	 *diff
+	 *star
+	 (*pack (lambda(ch)(list->string ch)))
+	done))
+
+
+(define <comment>
+(new (*parser (word "{{"))
+	(*parser <comment-string>) 
+	(*parser (word "}}"))
+	(*caten 3)
+	(*parser (word "{{"))
+	(*parser <comment-string>)
+	(*delayed (lambda() <comment>))
+	(*parser (word "}}"))
+	(*caten 4)
+	(*disj 2)
+done))
+
+
 (define <sen>
 (lambda(string-l l)
 (<sym> (string->list string-l)
@@ -145,5 +171,9 @@
 	      (cadr (assoc (string->symbol e) l)))
 	    (lambda (w) `(failed with report: ,@w)))))
 
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;exemple for guard and diff;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
