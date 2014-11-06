@@ -172,7 +172,18 @@ done))
 	    (lambda (w) `(failed with report: ,@w)))))
 
 
-
+(define <symbol>
+  (new (*parser (range-ci #\a #\z))
+       (*parser (range-ci #\0 #\9))
+       (*parser (one-of "!$^*-_=+<>?/"))
+       (*disj 3) *plus
+       (*pack
+	(lambda (s)
+	  (string->symbol
+	   (list->string s))))
+       (*parser <natural-number>)
+       *diff
+       done))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;exemple for guard and diff;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
