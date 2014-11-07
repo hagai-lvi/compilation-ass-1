@@ -21,9 +21,9 @@
 		`do_something))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;            examples             ;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;
+;;;;;  examples  ;;;;;
+;;;;;;;;;;;;;;;;;;;;;;
 
 (define <digit-0-9>
   (range #\0 #\9))
@@ -52,9 +52,10 @@
 		 (*pack (lambda (_) 0))
 	done))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;         end of examples         ;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;  end of examples  ;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
  (define ^<wrap>
  	(lambda (<left> <right>)
  		(lambda (<p>)
@@ -109,9 +110,10 @@
 ; (test-string <nat-wrapped-in-spaces-and-brackets> "{   1   }") returns 1
 (define <nat-wrapped-in-spaces-and-brackets>
 	(<wrapped-in-brackets> (<wrapped-in-spaces>  <nat>)))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;      EXPERIEMNTS       ;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;  EXPERIEMNTS  ;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (define x (^<wrap> <left-bracket> <right-bracket>))
 (define y (x <nat>))
 
@@ -122,9 +124,9 @@
 	(lambda(x)		;fail
 		'fail))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;  string defenition  ;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;  string defenition  ;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <symbol>
   (new (*parser (range-ci #\a #\z))
@@ -266,7 +268,7 @@ lambda(x) 'fail))
 (<middle-arrow> (string->list "~<--10-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 
-;;;;;;;;;;;; allignment with variables
+;;;;;;;  allignment with variables  ;;;;;;;
 
 ;identifies ----var--- and returns var
 (define <lines-var-lines>
