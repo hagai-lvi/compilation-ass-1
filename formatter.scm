@@ -458,8 +458,11 @@ lambda(x) 'fail))
            
           (if (null? s)
 	      	 (list->string `(,@string-to-print ,@(string->list (e optional-list))))
-	      	(formatter-with-args (list->string s) optional-list `(,@string-to-print ,@(string->list (e optional-list))))))
-	    (lambda (w) `(failed with report: ,@w)))))
+	     (if(char? string-to-print)	
+                 (formatter-with-args (list->string s) optional-list (string->list (e optional-list))))))
+          (formatter-with-args (list->string s) optional-list `(,@string-to-print ,@(string->list (e optional-list))))))
+	    
+          (lambda (w) `(failed with report: ,@w)))))
 
 (define <formatter>
 	(new
