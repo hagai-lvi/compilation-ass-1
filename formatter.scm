@@ -10,15 +10,7 @@
 	(lambda (format-string . optional-list)
 		(if (null? optional-list)
 			(formatter-no-args format-string)
-			(formatter-with-args format-string optional-list))))
-
-(define formatter-no-args
-	(lambda (format-string)
-		`do_something))
-
-(define formatter-with-args
-	(lambda (format-string optional-list)
-		`do_something))
+			(formatter-with-args format-string optional-list '()))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -161,7 +153,7 @@
 
 ;identifies {   variable   }
 (define <variable>
-((^<wrap> (char #\{)(char #\}))
+((^<wrap> (word "~{")(char #\}))
 ((^<wrap> (star <white>)(star <white>))
 <symbol>)))
 ;test (<sen> "{day-of-week}" `((day-of-week "Friday")(day-of month "never")))
@@ -433,7 +425,8 @@ lambda(x) 'fail))
 
        (*parser (char #\"))
        (*parser (char #\\))
-       (*disj 2)
+       (*parser (char #\~))
+       (*disj 3)
 
        *diff
        (*disj 2)
@@ -449,8 +442,29 @@ lambda(x) 'fail))
 
 
 (define <content>
-	(new (*parser string)
-		 (*parser variable)
+	(new (*parser <string>)
+		 (*parser <variable>)
 	*diff
-	*star
 	done))
+
+(define formatter-no-args
+	(lambda (format-string)
+		`do_something))
+
+(define formatter-with-args
+	(lambda (format-string optional-list string-to-print)
+		(<formatter> (string->list format-string)
+	(lambda (e s)
+	      (if (null? s)
+	      	 `(,string-to-print ,(e optional-list))
+	      	(formatter-with-args (list->string s) optional-list `(,string-to-print ,(e optional-list)))))
+	    (lambda (w) `(failed with report: ,@w)))))
+
+(define <formatter>
+	(new
+	(*parser <content>)
+	(*pack (lambda(ch) (lambda(l) ch)))
+	(*parser <variable>)
+	(*pack (lambda(ch)(lambda(l)(cadr (assoc ch l)))))
+	(*disj 2)
+done))
