@@ -137,8 +137,8 @@
 	
 	done))
 
-
-(define <sym>
+;identifies {   variable   }
+(define <variable>
 ((^<wrap> (char #\{)(char #\}))
 ((^<wrap> (star <white>)(star <white>))
 <symbol>)))
