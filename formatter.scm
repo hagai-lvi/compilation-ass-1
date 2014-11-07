@@ -170,11 +170,11 @@
 
 
 (define <comment>
-(new (*parser (word "{{"))
+(new (*parser (word "~{{"))
 	(*parser <comment-string>) 
 	(*parser (word "}}"))
 	(*caten 3)
-	(*parser (word "{{"))
+	(*parser (word "~{{"))
 	(*parser <comment-string>)
 	(*delayed (lambda() <comment>))
 	(*parser (word "}}"))
@@ -445,6 +445,8 @@ lambda(x) 'fail))
 	(new (*parser <string>)
 		 (*parser <variable>)
 	*diff
+		(*parser <comment>)
+		*diff
 	done))
 
 (define formatter-no-args
@@ -455,12 +457,12 @@ lambda(x) 'fail))
 	(lambda(format-string optional-list string-to-print)
 		(<formatter> (string->list format-string)
 	(lambda (e s)     
-           
-          (if (null? s)
-	      	 (list->string `(,@string-to-print ,@(string->list (e optional-list))))
-	     (if(char? string-to-print)	
-                 (formatter-with-args (list->string s) optional-list (string->list (e optional-list))))))
-          (formatter-with-args (list->string s) optional-list `(,@string-to-print ,@(string->list (e optional-list))))))
+         (cond  
+           ((and (null? s)(not(char? string-to-print))) (list->string `(,@string-to-print ,@(string->list (e optional-list)))))
+	   ((and (null? s)(char? string-to-print))(e optional-list))  
+           (else(if(char? string-to-print)	
+                 (formatter-with-args (list->string s) optional-list (string->list (e optional-list)))
+          (formatter-with-args (list->string s) optional-list `(,@string-to-print ,@(string->list (e optional-list))))))))
 	    
           (lambda (w) `(failed with report: ,@w)))))
 
@@ -470,5 +472,7 @@ lambda(x) 'fail))
 	(*pack (lambda(ch) (lambda(l) ch)))
 	(*parser <variable>)
 	(*pack (lambda(ch)(lambda(l)(cadr (assoc ch l)))))
-	(*disj 2)
+        (*parser <comment>)
+        (*pack (lambda(ch)(lambda(l)""))))
+	(*disj 3)
 done))
