@@ -7,10 +7,10 @@
 
 
 (define formatter
-	(lambda (format-string . optional-list)
+	(lambda (format-string optional-list)
 		(if (null? optional-list)
 			(formatter-no-args format-string)
-			(formatter-with-args format-string optional-list '()))))
+			(formatter-with-args format-string optional-list #\nul))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -452,12 +452,13 @@ lambda(x) 'fail))
 		`do_something))
 
 (define formatter-with-args
-	(lambda (format-string optional-list string-to-print)
+	(lambda(format-string optional-list string-to-print)
 		(<formatter> (string->list format-string)
-	(lambda (e s)
-	      (if (null? s)
-	      	 `(,string-to-print ,(e optional-list))
-	      	(formatter-with-args (list->string s) optional-list `(,string-to-print ,(e optional-list)))))
+	(lambda (e s)     
+           
+          (if (null? s)
+	      	 (list->string `(,@string-to-print ,@(string->list (e optional-list))))
+	      	(formatter-with-args (list->string s) optional-list `(,@string-to-print ,@(string->list (e optional-list))))))
 	    (lambda (w) `(failed with report: ,@w)))))
 
 (define <formatter>
