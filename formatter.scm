@@ -214,7 +214,38 @@ done))
 			(*pack-with
 				(lambda ( _1 _2 n ) n))
 	done))
+;;;test for <left-arrow>
+(<left-arrow> (string->list "~<--10--") (lambda (x y) `(match: ,x left: ,y)) (
+lambda(x) 'fail))
 
+; identifies ~-----n----> and returns n
+(define <right-arrow>
+	(new 	(*parser (char #\~))
+			(*parser <lines-nat-lines>)
+			(*parser (char #\>))
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 n _3 ) n))
+	done))
+
+;test for <right-arrow>
+(<right-arrow> (string->list "~--10-->") (lambda (x y) `(match: ,x left: ,y)) 
+(lambda(x) 'fail))
+
+; identifies ~<-----n----> and returns n
+(define <middle-arrow>
+	(new 	(*parser (char #\~))
+			(*parser (char #\<))
+			(*parser <lines-nat-lines>)
+			(*parser (char #\>))
+			(*caten 4)
+			(*pack-with
+				(lambda ( _1  _2 n _4 ) n))
+	done))
+
+;;;test for <middle-arrow>
+(<middle-arrow> (string->list "~<--10-->") (lambda (x y) `(match: ,x left: ,y)
+) (lambda(x) 'fail))
 
 
 
