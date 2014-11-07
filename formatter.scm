@@ -176,9 +176,59 @@ done))
 	      (cadr (assoc (string->symbol e) l)))
 	    (lambda (w) `(failed with report: ,@w)))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;  Allignment related  ;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;exemple for guard and diff;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; identfies ----
+(define <lines>
+	(new 	(*parser (char #\-))
+			*star
+	done))
+
+;;;test for <lines>
+(<lines> (string->list "---") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 
+'fail))
+
+;identifies ----n--- and returns n
+(define <lines-nat-lines>
+	(new 	(*parser <lines>)
+			(*parser <nat>)
+			(*parser <lines>)
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 n _2 ) n))
+	done))
+
+;;;test for <lines-nat-lines>
+(<lines-nat-lines> (string->list "---5-") (lambda (x y) `(match: ,x left: ,y))
+ (lambda(x) 'fail))
+
+; identifies ~<-----n---- and returns n
+(define <left-arrow>
+	(new 	(*parser (char #\~))
+			(*parser (char #\<))
+			(*parser <lines-nat-lines>)
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 _2 n ) n))
+	done))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
