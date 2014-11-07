@@ -136,7 +136,7 @@
 (define <sym>
 ((^<wrap> (char #\{)(char #\}))
 ((^<wrap> (star <white>)(star <white>))
-<string-new>)))
+<symbol>)))
 ;test (<sen> "{day-of-week}" `((day-of-week "Friday")(day-of month "never")))
 
 (define <comment-string>
