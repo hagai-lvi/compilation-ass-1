@@ -182,12 +182,119 @@ done))
 (lambda(string-l l)
 (<sym> (string->list string-l)
  (lambda (e s)
-	      (cadr (assoc (string->symbol e) l)))
+	      (cadr (assoc  e l)))
 	    (lambda (w) `(failed with report: ,@w)))))
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;exemple for guard and diff;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;2.2.7;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+(define <hex-digit>
+  (let ((zero (char->integer #\0))
+	(lc-a (char->integer #\a))
+	(uc-a (char->integer #\A)))
+    (new (*parser (range #\0 #\9))
+	 (*pack
+	  (lambda (ch)
+	    (- (char->integer ch) zero)))
+
+	 (*parser (range #\a #\f))
+	 (*pack
+	  (lambda (ch)
+	    (+ 10 (- (char->integer ch) lc-a))))
+
+	 (*parser (range #\A #\F))
+	 (*pack
+	  (lambda (ch)
+	    (+ 10 (- (char->integer ch) uc-a))))
+
+	 (*disj 3)
+	 done)))
+
+(define <XX>
+  (new (*parser <hex-digit>)
+       (*parser <hex-digit>)
+       (*caten 2)
+       (*pack-with
+	(lambda (h l)
+	  (+ l (* h 16))))
+       done))
+
+(define <XXXX>
+  (new (*parser <XX>)
+       (*parser <XX>)
+       (*caten 2)
+       (*pack-with
+	(lambda (h l)
+	  (+ l (* 256 h))))
+       done))
+
+(define <hex-char>
+  (new (*parser (word-ci "\\x"))
+  		(*parser (word-ci "\\u"))
+  		(*parser (word-ci "\\16#"))
+  		(*disj 3)	
+       (*parser <XXXX>)
+       (*parser <XX>)
+       (*disj 2)
+       (*pack integer->char)
+
+       (*caten 2)
+       (*pack-with (lambda (_< ch ) ch))
+       done))
+
+(define ^<meta-char>
+  (lambda (str ch)
+    (new (*parser (word str))
+	 (*pack (lambda (_) ch))
+	 done)))
+
+(define <string-meta-char>
+  (new 
+       (*parser (^<meta-char> "\\\"" #\"))
+       (*parser <hex-char>)
+       (*parser (^<meta-char> "\\n" #\newline))
+       (*parser (^<meta-char> "\\{newline}" #\newline))
+       (*parser (^<meta-char> "\\r" #\return))
+       (*parser (^<meta-char> "\\{return}" #\return))
+       (*parser (^<meta-char> "\\t" #\tab))
+       (*parser (^<meta-char> "\\f" #\page)) ; formfeed
+       (*parser (^<meta-char> "\\{page}" #\page)) ; formfeed
+       (*parser (^<meta-char> "\\t" #\tab))
+       (*parser (^<meta-char> "\\{tab}" #\tab))
+       (*parser (^<meta-char> "\\{lambda}" (integer->char 955)))
+       (*parser (^<meta-char> "\\{alef}" (integer->char 1488)))
+       (*parser (^<meta-char> "\\{bismillah}" (integer->char 65021)))
+       (*parser (^<meta-char> "\\{smiley}" (integer->char 9786)))
+       (*parser (^<meta-char> "\\{" #\{))
+       (*parser (^<meta-char> "\\}" #\}))
+       (*parser (^<meta-char> "~~" #\~))
+       (*disj 18)
+       done))
+
+(define <string-char>
+  (new (*parser <string-meta-char>)
+
+       (*parser <any-char>)
+
+       (*parser (char #\"))
+       (*parser (char #\\))
+       (*disj 2)
+
+       *diff
+       (*disj 2)
+       done))
+
+
+(define <string>
+    (new(*parser <string-char>) *star
+       (*pack
+	(lambda (chars)
+	  (list->string chars)))
+
+       done))
 
