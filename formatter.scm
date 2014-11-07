@@ -447,3 +447,10 @@ lambda(x) 'fail))
 
        done))
 
+
+(define <content>
+	(new (*parser string)
+		 (*parser variable)
+	*diff
+	*star
+	done))
