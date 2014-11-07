@@ -6,6 +6,11 @@
 (define unicode-char-double-overflow (integer->char 9757))
 
 
+(define formatter
+	(lambda (format-string . optional-list)
+		(parse format-string)
+	))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;            examples             ;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
