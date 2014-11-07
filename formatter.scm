@@ -8,8 +8,18 @@
 
 (define formatter
 	(lambda (format-string . optional-list)
-		(parse format-string)
-	))
+		(if (null? optional-list)
+			(formatter-no-args format-string)
+			(formatter-with-args format-string optional-list))))
+
+(define formatter-no-args
+	(lambda (format-string)
+		`do_something))
+
+(define formatter-with-args
+	(lambda (format-string optional-list)
+		`do_something))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;            examples             ;;;;;
