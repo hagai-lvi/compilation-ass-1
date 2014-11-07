@@ -1,6 +1,11 @@
 (load "pc.scm")
-;testing 123333;
-;commit test
+
+
+(define unicode-char-overflow-right (integer->char 9758))
+(define unicode-char-overflow-left (integer->char 9756))
+(define unicode-char-double-overflow (integer->char 9757))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;            examples             ;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -188,8 +193,7 @@ done))
 	done))
 
 ;;;test for <lines>
-(<lines> (string->list "---") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 
-'fail))
+(<lines> (string->list "---") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 
 
@@ -204,8 +208,7 @@ done))
 	done))
 
 ;;;test for <lines-nat-lines>
-(<lines-nat-lines> (string->list "---5-") (lambda (x y) `(match: ,x left: ,y))
- (lambda(x) 'fail))
+(<lines-nat-lines> (string->list "---5-") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 ; identifies ~<-----n---- and returns n
 (define <left-arrow>
@@ -231,8 +234,7 @@ lambda(x) 'fail))
 	done))
 
 ;test for <right-arrow>
-(<right-arrow> (string->list "~--10-->") (lambda (x y) `(match: ,x left: ,y)) 
-(lambda(x) 'fail))
+(<right-arrow> (string->list "~--10-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 ; identifies ~<-----n----> and returns n
 (define <middle-arrow>
@@ -246,8 +248,7 @@ lambda(x) 'fail))
 	done))
 
 ;;;test for <middle-arrow>
-(<middle-arrow> (string->list "~<--10-->") (lambda (x y) `(match: ,x left: ,y)
-) (lambda(x) 'fail))
+(<middle-arrow> (string->list "~<--10-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 
 ;;;;;;;;;;;; allignment with variables
@@ -276,8 +277,7 @@ lambda(x) 'fail))
 				(lambda ( _1 _2 var ) var))
 	done))
 ;;;test for <left-arrow>
-(<left-arrow-var> (string->list "~<--{var}--") (lambda (x y) `(match: ,x left: ,y)) (
-lambda(x) 'fail))
+(<left-arrow-var> (string->list "~<--{var}--") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 ; identifies ~-----{var}----> and returns var
 (define <right-arrow-var>
@@ -290,8 +290,7 @@ lambda(x) 'fail))
 	done))
 
 ;test for <right-arrow>
-(<right-arrow-var> (string->list "~--{var}-->") (lambda (x y) `(match: ,x left: ,y)) 
-(lambda(x) 'fail))
+(<right-arrow-var> (string->list "~--{var}-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 ; identifies ~<-----{var}----> and returns var
 (define <middle-arrow-var>
@@ -305,8 +304,7 @@ lambda(x) 'fail))
 	done))
 
 ;;;test for <middle-arrow>
-(<middle-arrow-var> (string->list "~<--{var}-->") (lambda (x y) `(match: ,x left: ,y)
-) (lambda(x) 'fail))
+(<middle-arrow-var> (string->list "~<--{var}-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 
 
