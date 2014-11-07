@@ -191,6 +191,8 @@ done))
 (<lines> (string->list "---") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 
 'fail))
 
+
+
 ;identifies ----n--- and returns n
 (define <lines-nat-lines>
 	(new 	(*parser <lines>)
@@ -245,6 +247,65 @@ lambda(x) 'fail))
 
 ;;;test for <middle-arrow>
 (<middle-arrow> (string->list "~<--10-->") (lambda (x y) `(match: ,x left: ,y)
+) (lambda(x) 'fail))
+
+
+;;;;;;;;;;;; allignment with variables
+
+;identifies ----var--- and returns var
+(define <lines-var-lines>
+	(new 	(*parser <lines>)
+			(*parser <variable>)
+			(*parser <lines>)
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 var _2 ) var))
+	done))
+
+;;;test for <lines-nat-lines>
+(<lines-var-lines> (string->list "---{var}-") (lambda (x y) `(match: ,x left: ,y))
+ (lambda(x) 'fail))
+
+; identifies ~<-----{var}--- and returns var
+(define <left-arrow-var>
+	(new 	(*parser (char #\~))
+			(*parser (char #\<))
+			(*parser <lines-var-lines>)
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 _2 var ) var))
+	done))
+;;;test for <left-arrow>
+(<left-arrow-var> (string->list "~<--{var}--") (lambda (x y) `(match: ,x left: ,y)) (
+lambda(x) 'fail))
+
+; identifies ~-----{var}----> and returns var
+(define <right-arrow-var>
+	(new 	(*parser (char #\~))
+			(*parser <lines-var-lines>)
+			(*parser (char #\>))
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 var _3 ) var))
+	done))
+
+;test for <right-arrow>
+(<right-arrow-var> (string->list "~--{var}-->") (lambda (x y) `(match: ,x left: ,y)) 
+(lambda(x) 'fail))
+
+; identifies ~<-----{var}----> and returns var
+(define <middle-arrow-var>
+	(new 	(*parser (char #\~))
+			(*parser (char #\<))
+			(*parser <lines-var-lines>)
+			(*parser (char #\>))
+			(*caten 4)
+			(*pack-with
+				(lambda ( _1  _2 var _4 ) var))
+	done))
+
+;;;test for <middle-arrow>
+(<middle-arrow-var> (string->list "~<--{var}-->") (lambda (x y) `(match: ,x left: ,y)
 ) (lambda(x) 'fail))
 
 
