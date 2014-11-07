@@ -1,15 +1,32 @@
 (load "pc.scm")
-;testing 123333;
-;commit test
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;            examples             ;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(define unicode-char-overflow-right (integer->char 9758))
+(define unicode-char-overflow-left (integer->char 9756))
+(define unicode-char-double-overflow (integer->char 9757))
+
+
+(define formatter
+	(lambda (format-string . optional-list)
+		(if (null? optional-list)
+			(formatter-no-args format-string)
+			(formatter-with-args format-string optional-list))))
+
+(define formatter-no-args
+	(lambda (format-string)
+		`do_something))
+
+(define formatter-with-args
+	(lambda (format-string optional-list)
+		`do_something))
+
+
+;;;;;;;;;;;;;;;;;;;;;;
+;;;;;  examples  ;;;;;
+;;;;;;;;;;;;;;;;;;;;;;
 
 (define <digit-0-9>
   (range #\0 #\9))
-
-
-
 
 (define <digit-1-9>
   (range #\1 #\9))
@@ -35,9 +52,10 @@
 		 (*pack (lambda (_) 0))
 	done))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;         end of examples         ;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;  end of examples  ;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
  (define ^<wrap>
  	(lambda (<left> <right>)
  		(lambda (<p>)
@@ -92,9 +110,10 @@
 ; (test-string <nat-wrapped-in-spaces-and-brackets> "{   1   }") returns 1
 (define <nat-wrapped-in-spaces-and-brackets>
 	(<wrapped-in-brackets> (<wrapped-in-spaces>  <nat>)))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;      EXPERIEMNTS       ;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;  EXPERIEMNTS  ;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (define x (^<wrap> <left-bracket> <right-bracket>))
 (define y (x <nat>))
 
@@ -105,15 +124,9 @@
 	(lambda(x)		;fail
 		'fail))
 
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;string defenition;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;  string defenition  ;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <symbol>
   (new (*parser (range-ci #\a #\z))
@@ -146,8 +159,8 @@
 	
 	done))
 
-
-(define <sym>
+;identifies {   variable   }
+(define <variable>
 ((^<wrap> (char #\{)(char #\}))
 ((^<wrap> (star <white>)(star <white>))
 <symbol>)))
@@ -185,7 +198,145 @@ done))
 	      (cadr (assoc  e l)))
 	    (lambda (w) `(failed with report: ,@w)))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;  Allignment related  ;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+; identfies ----
+(define <lines>
+	(new 	(*parser (char #\-))
+			*star
+	done))
+
+;;;test for <lines>
+(<lines> (string->list "---") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
+
+
+
+;identifies ----n--- and returns n
+(define <lines-nat-lines>
+	(new 	(*parser <lines>)
+			(*parser <nat>)
+			(*parser <lines>)
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 n _2 ) n))
+	done))
+
+;;;test for <lines-nat-lines>
+(<lines-nat-lines> (string->list "---5-") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
+
+; identifies ~<-----n---- and returns n
+(define <left-arrow>
+	(new 	(*parser (char #\~))
+			(*parser (char #\<))
+			(*parser <lines-nat-lines>)
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 _2 n ) n))
+	done))
+;;;test for <left-arrow>
+(<left-arrow> (string->list "~<--10--") (lambda (x y) `(match: ,x left: ,y)) (
+lambda(x) 'fail))
+
+; identifies ~-----n----> and returns n
+(define <right-arrow>
+	(new 	(*parser (char #\~))
+			(*parser <lines-nat-lines>)
+			(*parser (char #\>))
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 n _3 ) n))
+	done))
+
+;test for <right-arrow>
+(<right-arrow> (string->list "~--10-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
+
+; identifies ~<-----n----> and returns n
+(define <middle-arrow>
+	(new 	(*parser (char #\~))
+			(*parser (char #\<))
+			(*parser <lines-nat-lines>)
+			(*parser (char #\>))
+			(*caten 4)
+			(*pack-with
+				(lambda ( _1  _2 n _4 ) n))
+	done))
+
+;;;test for <middle-arrow>
+(<middle-arrow> (string->list "~<--10-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
+
+
+;;;;;;;  allignment with variables  ;;;;;;;
+
+;identifies ----var--- and returns var
+(define <lines-var-lines>
+	(new 	(*parser <lines>)
+			(*parser <variable>)
+			(*parser <lines>)
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 var _2 ) var))
+	done))
+
+;;;test for <lines-nat-lines>
+(<lines-var-lines> (string->list "---{var}-") (lambda (x y) `(match: ,x left: ,y))
+ (lambda(x) 'fail))
+
+; identifies ~<-----{var}--- and returns var
+(define <left-arrow-var>
+	(new 	(*parser (char #\~))
+			(*parser (char #\<))
+			(*parser <lines-var-lines>)
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 _2 var ) var))
+	done))
+;;;test for <left-arrow>
+(<left-arrow-var> (string->list "~<--{var}--") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
+
+; identifies ~-----{var}----> and returns var
+(define <right-arrow-var>
+	(new 	(*parser (char #\~))
+			(*parser <lines-var-lines>)
+			(*parser (char #\>))
+			(*caten 3)
+			(*pack-with
+				(lambda ( _1 var _3 ) var))
+	done))
+
+;test for <right-arrow>
+(<right-arrow-var> (string->list "~--{var}-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
+
+; identifies ~<-----{var}----> and returns var
+(define <middle-arrow-var>
+	(new 	(*parser (char #\~))
+			(*parser (char #\<))
+			(*parser <lines-var-lines>)
+			(*parser (char #\>))
+			(*caten 4)
+			(*pack-with
+				(lambda ( _1  _2 var _4 ) var))
+	done))
+
+;;;test for <middle-arrow>
+(<middle-arrow-var> (string->list "~<--{var}-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<<<<<<< HEAD
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;2.2.7;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -288,6 +439,9 @@ done))
        *diff
        (*disj 2)
        done))
+=======
+
+>>>>>>> 924a0be2dc968232ac8e24c55543cf601713d551
 
 
 (define <string>
