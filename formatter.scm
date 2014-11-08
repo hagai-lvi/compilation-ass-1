@@ -370,11 +370,21 @@ done))
 		(cadr allign)
 	))
 
+(define get-dir-format-string
+	(lambda (direction length)
+		(let ((format-str 
+				(cond 	((eq? `middle direction) 123)
+				       	((eq? `left direction) "s")
+				   		((eq? `right direction) "@s"))))
+		(list->string `(#\~ ,@(string->list (number->string length)) ,@(string->list format-str)) )
+		)
+	))
 
 (define allign-string
 	(lambda (str direction length)
-		`abc)
-)
+		`abc))
+
+
 ;recognize ~<--1-->{var1} or ~<--{var0}-->{var1}
 ;example: "~<--1-->{var1}"" returns ((num middle 1) var1)
 ;returns procedure that waits for variables-list and returns the formatted string
@@ -390,9 +400,7 @@ done))
 										    (get-allign-num allign)
 										    (cadr (assoc (get-allign-var allign) var-map))))
 										(direction (get-allign-direction allign)))
-								(display to-print )
-								(display print-length )
-								(display direction)
+								(allign-string to-print direction length)
 								))))
 	done))
 
