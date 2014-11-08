@@ -7,10 +7,10 @@
 
 
 (define formatter
-	(lambda (format-string optional-list)
+	(lambda (format-string  . optional-list)
 		(if (null? optional-list)
-			(formatter-no-args format-string)
-			(formatter-with-args format-string optional-list #\nul))))
+			(formatter-with-args format-string '() #\nul)
+			(formatter-with-args format-string (car optional-list) #\nul))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -507,3 +507,66 @@ done))
 done))
 
 
+(define (test-4)
+  (let ((env
+	'((betty "Betty")
+	(bought "bought")
+	(a "a")
+	(bit "bit")
+	(of "of")
+	(butter "butter")
+	(but "but")
+	(the "the")
+	(was "was")
+	(too "too")
+	(bitter "bitter")
+	(so "so")
+	(she "she")
+	(brought "brought")
+	(back "back"))))
+    (display
+     (formatter "
+~{betty} ~{bought} ~{a} ~{bit} ~{of} ~{butter},
+~{but} ~{the} ~{butter} ~{was} ~{too} ~{bitter},
+~{so} ~{she} ~{brought} ~{the} ~{bitter} ~{butter} ~{back}.
+" env))))
+
+(define (test-5)
+  (let ((env
+	'((betty "Betty")
+	(bought "bought")
+	(a "a")
+	(bit "bit")
+	(of "of")
+	(butter "butter")
+	(but "but")
+	(the "the")
+	(was "was")
+	(too "too")
+	(bitter "bitter")
+	(so "so")
+	(she "she")
+	(brought "brought")
+	(back "back"))))
+    (display
+     (formatter "
+~---10--->{betty} ~{bought} ~{a} ~{bit} ~{of} ~{butter},
+~---10--->{but} ~{the} ~{butter} ~{was} ~{too} ~{bitter},
+~---10--->{so} ~{she} ~{brought} ~{the} ~{bitter} ~{butter} ~{back}.
+" env))))
+	       
+(define (test-6)
+  (let ((env
+	 '((left-arrow-head "<")
+	   (right-arrow-head ">")
+	   (empty-head "")
+	   (great "Great!")
+	   (width 10))))
+    (display
+     (formatter
+      (formatter "
+[~~~{empty-head}---~{width}---~{right-arrow-head}{great}]\\\\{newline}
+[~~~{left-arrow-head}---~{width}---~{right-arrow-head}{great}]\\\\{newline}
+[~~~{left-arrow-head}---~{width}---~{empty-head}{great}]\\\\{newline}
+" env)
+      env))))
