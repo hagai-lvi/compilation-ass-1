@@ -194,6 +194,11 @@ done))
 ;;;;;;;;;  Allignment related  ;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;recognize {var} (without the ~)
+(define <allignment-variable>
+((^<wrap> (char #\{)(char #\}))
+((^<wrap> (star <white>)(star <white>))
+<symbol>)))
 
 ; identfies ----
 (define <lines>
@@ -229,8 +234,7 @@ done))
 				(lambda ( _1 _2 n ) n))
 	done))
 ;;;test for <left-arrow>
-(<left-arrow> (string->list "~<--10--") (lambda (x y) `(match: ,x left: ,y)) (
-lambda(x) 'fail))
+(<left-arrow> (string->list "~<--10--") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 ; identifies ~-----n----> and returns n
 (define <right-arrow>
@@ -265,7 +269,7 @@ lambda(x) 'fail))
 ;identifies ----var--- and returns var
 (define <lines-var-lines>
 	(new 	(*parser <lines>)
-			(*parser <variable>)
+			(*parser <allignment-variable>)
 			(*parser <lines>)
 			(*caten 3)
 			(*pack-with
@@ -317,6 +321,26 @@ lambda(x) 'fail))
 
 
 
+(define <allignment>
+	(new 	
+			(*parser <right-arrow>)
+			(*parser <middle-arrow>)
+			(*parser <left-arrow>)
+			(*disj 3)
+			(*pack (lambda (n) `(num ,n)))
+
+			(*parser <right-arrow-var>)
+			(*parser <middle-arrow-var>)
+			(*parser <left-arrow-var>)
+			(*disj 3)
+			(*pack (lambda (var) `(var ,var)))
+
+			(*disj 2)
+	done)
+)
+
+;test for <allignment>
+(<allignment> (string->list "~<--10--") (lambda (x y) `(match: ,(cadr x) left: ,y)) (lambda(x) 'fail))
 
 
 
@@ -481,3 +505,5 @@ lambda(x) 'fail))
         (*pack (lambda(ch)(lambda(l)"")))
 	(*disj 3)
 done))
+
+
