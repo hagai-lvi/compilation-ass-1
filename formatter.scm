@@ -320,20 +320,28 @@ done))
 (<middle-arrow-var> (string->list "~<--{var}-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 
-
+;recognize any arrow with var ot num and returns `(var ,var) or `(num ,n)
+;example: "~<--{var1}-->" returns (var middle var1)
+;"~<--1-->" returns (num middle 1)
 (define <allignment>
 	(new 	
 			(*parser <right-arrow>)
+			(*pack (lambda (n) `(right ,n)))
 			(*parser <middle-arrow>)
+			(*pack (lambda (n) `(middle ,n)))
 			(*parser <left-arrow>)
+			(*pack (lambda (n) `(left ,n)))
 			(*disj 3)
-			(*pack (lambda (n) `(num ,n)))
+			(*pack (lambda (list) `(num ,@list)))
 
 			(*parser <right-arrow-var>)
+			(*pack (lambda (var) `(right ,var)))
 			(*parser <middle-arrow-var>)
+			(*pack (lambda (var) `(middle ,var)))
 			(*parser <left-arrow-var>)
+			(*pack (lambda (var) `(left ,var)))
 			(*disj 3)
-			(*pack (lambda (var) `(var ,var)))
+			(*pack (lambda (list) `(var ,@list)))
 
 			(*disj 2)
 	done)
@@ -341,6 +349,20 @@ done))
 
 ;test for <allignment>
 (<allignment> (string->list "~<--10--") (lambda (x y) `(match: ,(cadr x) left: ,y)) (lambda(x) 'fail))
+
+
+;recognize ~<--1-->{var1} or ~<--{var0}-->{var1}
+;example: "~<--1-->{var1}"" returns ((num middle 1) var1)
+(define <allignment-and-var>
+	(new 	(*parser <allignment>)
+			(*parser <allignment-variable>)
+			(*caten 2)
+	done)
+
+)
+
+;test for <allignment-and-var> 
+(<allignment-and-var> (string->list "~<--1-->{var1}") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 
 
