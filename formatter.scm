@@ -380,9 +380,51 @@ done))
 		)
 	))
 
+(define cut-middle (lambda (str output-length)
+))
+(define cut-left (lambda (str output-length)
+))
+(define cut-right (lambda (str output-length)
+))
+
+(define cut-string (lambda (str direction output-length)
+	(cond 	((eq? `middle direction) (cut-middle str output-length))
+			((eq? `left direction) (cut-left str output-length))
+			((eq? `right direction) (cut-right str output-length)))
+))
+
+(define pad-allign-middle (lambda (str output-length)
+))
+
+(define pad-allign-left (lambda (str output-length)
+	(letrec ((add-spaces (lambda (str n)
+								(if (= n 0)
+								    str
+								    (add-spaces (list->string `( ,@(string->list str) #\space )) (- n 1) )))))
+	(add-spaces str (- output-length (string-length str)))
+	)))
+
+(define pad-allign-right (lambda (str output-length)
+	(letrec ((add-spaces (lambda (str n)
+								(if (= n 0)
+								    str
+								    (add-spaces (list->string `( #\space ,@(string->list str))) (- n 1) )))))
+	(add-spaces str (- output-length (string-length str)))
+	)))
+
+(define pad-string (lambda (str direction output-length)
+	(cond 	((eq? `middle direction) (pad-allign-middle str output-length))
+			((eq? `left direction) (pad-allign-left str output-length))
+			((eq? `right direction) (pad-allign-right str output-length)))
+))
+
 (define allign-string
-	(lambda (str direction length)
-		`abc))
+	(lambda (str direction output-length)
+		(let ((str-length (string-length str)))
+			(if (> str-length output-length)
+			    (cut-string str direction output-length)
+			    (pad-string str direction output-length))
+		)))
 
 
 ;recognize ~<--1-->{var1} or ~<--{var0}-->{var1}
