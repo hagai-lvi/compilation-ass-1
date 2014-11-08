@@ -365,6 +365,16 @@ done))
 		(caddr num-allign)
 	))
 
+(define get-allign-direction
+	(lambda (allign)
+		(cadr allign)
+	))
+
+
+(define allign-string
+	(lambda (str direction length)
+		`abc)
+)
 ;recognize ~<--1-->{var1} or ~<--{var0}-->{var1}
 ;example: "~<--1-->{var1}"" returns ((num middle 1) var1)
 ;returns procedure that waits for variables-list and returns the formatted string
@@ -378,9 +388,11 @@ done))
 										(print-length
 											(if (num-allign? allign)
 										    (get-allign-num allign)
-										    (cadr (assoc (get-allign-var allign) var-map)))))
+										    (cadr (assoc (get-allign-var allign) var-map))))
+										(direction (get-allign-direction allign)))
 								(display to-print )
 								(display print-length )
+								(display direction)
 								))))
 	done))
 
