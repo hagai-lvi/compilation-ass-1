@@ -332,7 +332,7 @@ done))
 			(*parser <left-arrow>)
 			(*pack (lambda (n) `(left ,n)))
 			(*disj 3)
-			(*pack (lambda (list) `(num ,@list)))
+			(*pack (lambda (list) `(num-allign ,@list)))
 
 			(*parser <right-arrow-var>)
 			(*pack (lambda (var) `(right ,var)))
@@ -341,7 +341,7 @@ done))
 			(*parser <left-arrow-var>)
 			(*pack (lambda (var) `(left ,var)))
 			(*disj 3)
-			(*pack (lambda (list) `(var ,@list)))
+			(*pack (lambda (list) `(var-allign ,@list)))
 
 			(*disj 2)
 	done)
@@ -350,16 +350,42 @@ done))
 ;test for <allignment>
 (<allignment> (string->list "~<--10--") (lambda (x y) `(match: ,(cadr x) left: ,y)) (lambda(x) 'fail))
 
+(define num-allign?
+	(lambda (x)
+		(eq? `num-allign (car x))
+	))
+
+(define get-allign-num
+	(lambda (num-allign)
+		(caddr num-allign)
+	))
+
+(define get-allign-var
+	(lambda (num-allign)
+		(caddr num-allign)
+	))
 
 ;recognize ~<--1-->{var1} or ~<--{var0}-->{var1}
 ;example: "~<--1-->{var1}"" returns ((num middle 1) var1)
+;returns procedure that waits for variables-list and returns the formatted string
 (define <allignment-and-var>
 	(new 	(*parser <allignment>)
 			(*parser <allignment-variable>)
 			(*caten 2)
-	done)
+			(*pack-with (lambda (allign var)
+							(lambda (var-map)
+								(let( 	(to-print (cadr (assoc  var var-map)))
+										(print-length
+											(if (num-allign? allign)
+										    (get-allign-num allign)
+										    (cadr (assoc (get-allign-var allign) var-map)))))
+								(display to-print )
+								(display print-length )
+								))))
+	done))
 
-)
+;test for <allignment-and-var>
+(<allignment-and-var> (string->list "~<--{var1}-->{var2}") (lambda (x y) (x  `((var1 2)(var2 a) )  )) (lambda(x) 'fail))
 
 ;test for <allignment-and-var> 
 (<allignment-and-var> (string->list "~<--1-->{var1}") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
@@ -523,9 +549,12 @@ done))
 	(*pack (lambda(ch) (lambda(l) ch)))
 	(*parser <variable>)
 	(*pack (lambda(ch)(lambda(l)(cadr (assoc ch l)))))
-        (*parser <comment>)
-        (*pack (lambda(ch)(lambda(l)"")))
-	(*disj 3)
+    (*parser <comment>)
+    (*pack (lambda(ch)(lambda(l)"")))
+    (*parser <allignment-and-var>)
+    (*pack (lambda(token)(lambda(var-map)(token var-map))))
+
+	(*disj 4)
 done))
 
 
