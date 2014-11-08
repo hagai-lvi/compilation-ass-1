@@ -203,7 +203,7 @@ done))
 ; identfies ----
 (define <lines>
 	(new 	(*parser (char #\-))
-			*star
+			*plus
 	done))
 
 ;;;test for <lines>
