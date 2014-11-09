@@ -602,6 +602,10 @@ done))
 	*diff
 		(*parser <comment>)
 		*diff
+		(*parser <allignment>)
+		*diff
+		(*parser <allignment-variable>)
+		*diff
 	done))
 
 (define formatter-no-args
