@@ -463,7 +463,7 @@ done))
 										    (get-allign-num allign)
 										    (cadr (assoc (get-allign-var allign) var-map))))
 										(direction (get-allign-direction allign)))
-								(allign-string to-print direction length)
+								(allign-string to-print direction print-length)
 								))))
 	done))
 
