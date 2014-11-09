@@ -388,7 +388,6 @@ done))
 				(cut-right (- cut-total cut-left))
 				(left-index cut-left)
 				(right-index (- str-length cut-right)))
-				;(sub (substring str left-index right-index)))
 	;(display `(,str-length ,#\space  ,cut-total ,#\space  ,cut-left ,#\space  ,cut-right ,#\space ,left-index ,#\space ,right-index ,#\space  ))
 	;(display (substring str left-index right-index) )
 
@@ -402,7 +401,7 @@ done))
 ))
 
 (define cut-allign-right (lambda (str output-length)
-	(list->string `(,unicode-char-overflow-left ,@(split-list (string->list str) (- output-length 1) (lambda(left right) right)) ))
+	(list->string `(,unicode-char-overflow-left ,@(split-list (string->list str) (- (string-length str)(- output-length 1)) (lambda(left right) right)) ))
 ))
 
 (define cut-allign-string (lambda (str direction output-length)
