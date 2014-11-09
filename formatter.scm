@@ -404,6 +404,8 @@ done))
 	(list->string `(,unicode-char-overflow-left ,@(split-list (string->list str) (- (string-length str)(- output-length 1)) (lambda(left right) right)) ))
 ))
 
+;example: (cut-allign-string "012345678" 'right 3) returns "☜78"
+; PRE: (< (string-length str) output-length)
 (define cut-allign-string (lambda (str direction output-length)
 	(cond 	((eq? `middle direction) (cut-allign-middle str output-length))
 			((eq? `left direction) (cut-allign-left str output-length))
@@ -466,7 +468,7 @@ done))
 	done))
 
 ;test for <allignment-and-var>
-(<allignment-and-var> (string->list "~<--{var1}-->{var2}") (lambda (x y) (x  `((var1 2)(var2 a) )  )) (lambda(x) 'fail))
+;(<allignment-and-var> (string->list "~<--{var1}-->{var2}") (lambda (x y) (x  `((var1 2)(var2 "abc") )  )) (lambda(x) 'fail))
 
 ;test for <allignment-and-var> 
 (<allignment-and-var> (string->list "~<--1-->{var1}") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
