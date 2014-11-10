@@ -174,12 +174,12 @@ so she brought the bitter butter back."
 	)
 )
 
-(run-test-suite foo)
+(run-test-suites foo)
 ;(run-test foo first-test)
 ;(run-tests foo test-one)
 
 
-(exit)
+(exit (run-test-suites foo))
 
 (define (test-6)
   (let ((env
