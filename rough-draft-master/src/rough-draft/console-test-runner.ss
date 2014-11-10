@@ -131,7 +131,8 @@
               (printf "~d test~:p failed (~d error~:p, ~d exception~:p)~%"
                 (map-+ suite-info-failure-count suite-info*)
                 (map-+ suite-info-error-count suite-info*)
-                (map-+ suite-info-exception-count suite-info*)))
+                (map-+ suite-info-exception-count suite-info*))
+                (+ (map-+ suite-info-exception-count suite-info*) (map-+ suite-info-error-count suite-info*) (map-+ suite-info-failure-count suite-info*)))
             (loop (cdr test-suites) (cons ($run-test-suite (car test-suites)) suite-info*))))))
 
   (define run-test-suite
