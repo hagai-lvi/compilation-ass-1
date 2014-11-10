@@ -174,9 +174,6 @@ done))
 				(lambda ( _1 n _3 ) n))
 	done))
 
-;test for <right-arrow>
-(<right-arrow> (string->list "~--10-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
-
 ; identifies ~<-----n----> and returns n
 (define <middle-arrow>
 	(new 	(*parser (char #\~))
@@ -187,10 +184,6 @@ done))
 			(*pack-with
 				(lambda ( _1  _2 n _4 ) n))
 	done))
-
-;;;test for <middle-arrow>
-(<middle-arrow> (string->list "~<--10-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
-
 
 ;;;;;;;  allignment with variables  ;;;;;;;
 
@@ -204,10 +197,6 @@ done))
 				(lambda ( _1 var _2 ) var))
 	done))
 
-;;;test for <lines-nat-lines>
-(<lines-var-lines> (string->list "---{var}-") (lambda (x y) `(match: ,x left: ,y))
- (lambda(x) 'fail))
-
 ; identifies ~<-----{var}--- and returns var
 (define <left-arrow-var>
 	(new 	(*parser (char #\~))
@@ -217,8 +206,6 @@ done))
 			(*pack-with
 				(lambda ( _1 _2 var ) var))
 	done))
-;;;test for <left-arrow>
-(<left-arrow-var> (string->list "~<--{var}--") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 ; identifies ~-----{var}----> and returns var
 (define <right-arrow-var>
@@ -230,9 +217,6 @@ done))
 				(lambda ( _1 var _3 ) var))
 	done))
 
-;test for <right-arrow>
-(<right-arrow-var> (string->list "~--{var}-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
-
 ; identifies ~<-----{var}----> and returns var
 (define <middle-arrow-var>
 	(new 	(*parser (char #\~))
@@ -243,10 +227,6 @@ done))
 			(*pack-with
 				(lambda ( _1  _2 var _4 ) var))
 	done))
-
-;;;test for <middle-arrow>
-(<middle-arrow-var> (string->list "~<--{var}-->") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
-
 
 ;recognize any arrow with var ot num and returns `(var ,var) or `(num ,n)
 ;example: "~<--{var1}-->" returns (var middle var1)

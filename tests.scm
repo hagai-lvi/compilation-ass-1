@@ -148,6 +148,20 @@ so she brought the bitter butter back."
 		(assert-equal? (<lines-var-lines> (string->list "---{var}-") (lambda (x y) (symbol->string x)) (lambda(x) 'fail)) "var")
 		(assert-equal? (<lines-var-lines> (string->list "---{var}-") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
 	)
+	(define-test test-<left-arrow-var>-1
+		(assert-equal? (<left-arrow-var> (string->list "~<--{var}--") (lambda (x y) (symbol->string x)) (lambda(x) 'fail)) "var")
+		(assert-equal? (<left-arrow-var> (string->list "~<--{var}--") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
+	)
+
+	(define-test test-<right-arrow-var>-1
+		(assert-equal? (<right-arrow-var> (string->list "~--{var}-->") (lambda (x y) (symbol->string x)) (lambda(x) 'fail)) "var")
+		(assert-equal? (<right-arrow-var> (string->list "~--{var}-->") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
+	)
+
+	(define-test test-<middle-arrow-var>-1
+		(assert-equal? (<middle-arrow-var> (string->list "~<--{var}-->") (lambda (x y) (symbol->string x)) (lambda(x) 'fail)) "var")
+		(assert-equal? (<middle-arrow-var> (string->list "~<--{var}-->") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
+	)
 )
 
 (run-test-suite foo)
