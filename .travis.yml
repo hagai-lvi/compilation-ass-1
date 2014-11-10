@@ -9,7 +9,7 @@ before_install:
  - cd csv8.4/custom
  - ./configure
  - make
- - make install
+ - sudo make install
 
 install: ./install-petite.sh
 script: ./run-test.sh
