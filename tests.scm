@@ -184,7 +184,7 @@ so she brought the bitter butter back."
 ;(run-tests foo test-one)
 
 
-(exit)
+(exit 1)
 
 (define (test-6)
   (let ((env
