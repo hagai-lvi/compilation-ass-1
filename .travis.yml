@@ -1,0 +1,7 @@
+language: c
+
+compiler:
+ - gcc
+
+install: ./install-petite.sh
+script: ./run-test.sh
