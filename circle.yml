@@ -1,7 +1,6 @@
 machine:
   pre:
-    - cd compilation-ass-1
-    - ./install-petite.sh
+    - ./compilation-ass-1/install-petite.sh
 
 test:
   override:
