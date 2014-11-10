@@ -1,7 +1,6 @@
 machine:
   pre:
-    - pwd
-    - ls -la
+    - cd compilation-ass-1
     - ./install-petite.sh
 
 test:
