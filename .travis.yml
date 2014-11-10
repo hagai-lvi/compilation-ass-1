@@ -2,6 +2,7 @@ language: c
 
 compiler:
  - gcc
-
+ 
+before_install: sudo make install
 install: ./install-petite.sh
 script: ./run-test.sh
