@@ -111,14 +111,30 @@ so she brought the bitter butter back."
 	(she "she")
 	(brought "brought")
 	(back "back"))))
-	(display
 	(assert-equal? (formatter "
 ~---10--->{betty} ~{bought} ~{a} ~{bit} ~{of} ~{butter},
 ~---10--->{but} ~{the} ~{butter} ~{was} ~{too} ~{bitter},
 ~---10--->{so} ~{she} ~{brought} ~{the} ~{bitter} ~{butter} ~{back}." env) "
      Betty bought a bit of butter,
        but the butter was too bitter,
-        so she brought the bitter butter back."))))
+        so she brought the bitter butter back.")))
+
+	(define-test test-<lines>-1
+		(assert-equal? (<lines> (string->list "---") (lambda (x y) (list->string x)) (lambda(x) 'fail)) "---")
+		(assert-equal? (<lines> (string->list "---") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
+	)
+
+	(define-test test-<lines-nat-lines>-1
+		(assert-equal? (<lines-nat-lines> (string->list "---5-") (lambda (x y)  x) (lambda(x) 'fail)) 5)
+		(assert-equal? (<lines-nat-lines> (string->list "---5-") (lambda (x y)  (list->string y)) (lambda(x) 'fail)) "")
+	)
+
+	(define-test test-<left-arrow>-1
+		(assert-equal? (<left-arrow> (string->list "~<--10--") (lambda (x y) x) (lambda(x) 'fail)) 10)
+	)
+	(define-test test-<right-arrow>-1
+		(assert-equal? (<right-arrow> (string->list "~--10-->") (lambda (x y) x) (lambda(x) 'fail)) 10)
+	)
 )
 
 (run-test-suite foo)
@@ -126,4 +142,34 @@ so she brought the bitter butter back."
 ;(run-test foo first-test)
 
 ;(run-tests foo test-one)
+(define (test-6)
+  (let ((env
+	 '((left-arrow-head "<")
+	   (right-arrow-head ">")
+	   (empty-head "")
+	   (great "Great!")
+	   (width 10))))
+    (display
+      (formatter "~---10--->{great}]\\" env))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
