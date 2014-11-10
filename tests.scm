@@ -163,17 +163,24 @@ so she brought the bitter butter back."
 		(assert-equal? (<middle-arrow-var> (string->list "~<--{var}-->") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
 	)
 
-	(define-test test-<allignment>-1
+	(define-test test-<allignment>-num-1
 		(assert-equal? (<allignment> (string->list "~<--10--") (lambda (x y) x) (lambda(x) 'fail)) `(num-allign left 10))
 		(assert-equal? (<allignment> (string->list "~<--10--") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
+	)
+
+	(define-test test-<allignment>-var-1
+		(assert-equal? (<allignment> (string->list "~<--{var1}--") (lambda (x y) x) (lambda(x) 'fail)) `(var-allign left var1))
+		(assert-equal? (<allignment> (string->list "~<--{var1}--") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
 	)
 )
 
 (run-test-suite foo)
-
 ;(run-test foo first-test)
-
 ;(run-tests foo test-one)
+
+
+(exit)
+
 (define (test-6)
   (let ((env
 	 '((left-arrow-head "<")
