@@ -700,87 +700,12 @@ done))
 " env)
       env))))
 
-
-; expected output: "~abc"
-;also see mytest-11
-(define mytest-1 (lambda ()
-	(formatter "~~abc")
-	))
-
-; expected output: "~abc"
-(define mytest-2 (lambda ()
-	(let ((env `((var1 "abc"))))
-		(formatter "~~abc" env))
-	))
-
-; basic var test
-; expected output: "a"
-(define mytest-3 (lambda ()
-	(let ((env `(
-	(a "a")
-)))
-		(formatter "~{a}" env))
-))
-
-; basic 2 vars test
-; expected output: "a ab"
-(define mytest-4 (lambda ()
-	(let ((env `(
-	(a "a")
-	(ab "ab")
-)))
-		(formatter "~{a} ~{a}" env))
-))
-
-
-; basic allignment test
-; expected output: "ab   "
-(define mytest-5 (lambda ()
-	(let ((env `(
-	(five 5)
-	(ab "ab")
-)))
-		(formatter "~<--5--{ab}" env))
-))
-
-; basic allignment test
-; expected output: "ab   "
-(define mytest-6 (lambda ()
-	(let ((env `(
-	(five 5)
-	(ab "ab")
-)))
-		(formatter "~<--{five}--{ab}" env))
-))
-
-; basic allignment test
-; expected output: "   ab"
-(define mytest-7 (lambda ()
-	(let ((env `(
-	(five 5)
-	(ab "ab")
-)))
-		(formatter "~--5-->{ab}" env))
-))
-
-; basic allignment test
-; expected output: "   ab"
-(define mytest-8 (lambda ()
-	(let ((env `(
-	(five 5)
-	(ab "ab")
-)))
-		(formatter "~--{five}-->{ab}" env))
-))
-
-
 ; basic allignment test
 ; expected output: "  ab "
 (define mytest-9 (lambda ()
 	(let ((env `(
 	(five 5)
-	(ab "ab")
-)))
+	(ab "ab"))))
 		(formatter "~<--5-->{ab}" env))
 ))
 
@@ -789,8 +714,7 @@ done))
 (define mytest-10 (lambda ()
 	(let ((env `(
 	(five 5)
-	(ab "ab")
-)))
+	(ab "ab"))))
 		(formatter "~<--{five}-->{ab}" env))
 ))
 
