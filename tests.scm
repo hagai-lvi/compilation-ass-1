@@ -131,9 +131,22 @@ so she brought the bitter butter back."
 
 	(define-test test-<left-arrow>-1
 		(assert-equal? (<left-arrow> (string->list "~<--10--") (lambda (x y) x) (lambda(x) 'fail)) 10)
+		(assert-equal? (<left-arrow> (string->list "~<--10--") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
 	)
+
 	(define-test test-<right-arrow>-1
 		(assert-equal? (<right-arrow> (string->list "~--10-->") (lambda (x y) x) (lambda(x) 'fail)) 10)
+		(assert-equal? (<right-arrow> (string->list "~--10-->") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
+	)
+
+	(define-test test-<middle-arrow>-1
+		(assert-equal? (<middle-arrow> (string->list "~<--10-->") (lambda (x y) x) (lambda(x) 'fail)) 10)
+		(assert-equal? (<middle-arrow> (string->list "~<--10-->") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
+	)
+
+	(define-test test-<lines-var-lines>-1
+		(assert-equal? (<lines-var-lines> (string->list "---{var}-") (lambda (x y) (symbol->string x)) (lambda(x) 'fail)) "var")
+		(assert-equal? (<lines-var-lines> (string->list "---{var}-") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
 	)
 )
 
