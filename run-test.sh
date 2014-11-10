@@ -1,1 +1,1 @@
-petite tests.scm --libdirs "rough-draft-master/src/"
+petite -q tests.scm --libdirs "rough-draft-master/src/"
