@@ -6,6 +6,6 @@ tar xzf pcsv8.4-a6le.tar.gz
 
 cd csv8.4/custom
 dir=`pwd`
-./configure --installprefix="$dir"
+./configure --installprefix="$dir"/../..
 make
 make install
