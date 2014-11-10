@@ -468,7 +468,7 @@ done))
 	done))
 
 ;test for <allignment-and-var>
-;(<allignment-and-var> (string->list "~<--{var1}-->{var2}") (lambda (x y) (x  `((var1 2)(var2 "abc") )  )) (lambda(x) 'fail))
+(<allignment-and-var> (string->list "~<--{var1}-->{var2}") (lambda (x y) (x  `((var1 2)(var2 "abc") )  )) (lambda(x) 'fail))
 
 ;test for <allignment-and-var> 
 (<allignment-and-var> (string->list "~<--1-->{var1}") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
