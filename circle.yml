@@ -1,0 +1,5 @@
+machine:
+  pre: ./install-petite.sh
+
+test:
+  override: ./run-test.sh
