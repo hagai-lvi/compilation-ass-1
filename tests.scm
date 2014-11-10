@@ -67,6 +67,33 @@
 	(let ((env `((var1 "abc"))))
 		(assert-equal? (formatter "~~~{var1}" env) "~abc")))
 
+	(define-test my-test-12
+	(let ((env
+	'((betty "Betty")
+	(bought "bought")
+	(a "a")
+	(bit "bit")
+	(of "of")
+	(butter "butter")
+	(but "but")
+	(the "the")
+	(was "was")
+	(too "too")
+	(bitter "bitter")
+	(so "so")
+	(she "she")
+	(brought "brought")
+	(back "back"))))
+		(assert-equal? (formatter "
+~{betty} ~{bought} ~{a} ~{bit} ~{of} ~{butter},
+~{but} ~{the} ~{butter} ~{was} ~{too} ~{bitter},
+~{so} ~{she} ~{brought} ~{the} ~{bitter} ~{butter} ~{back}." env) 
+"
+Betty bought a bit of butter,
+but the butter was too bitter,
+so she brought the bitter butter back."
+				 )))
+
 )
 
 (run-test-suite foo)
