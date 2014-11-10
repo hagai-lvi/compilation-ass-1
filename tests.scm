@@ -162,6 +162,11 @@ so she brought the bitter butter back."
 		(assert-equal? (<middle-arrow-var> (string->list "~<--{var}-->") (lambda (x y) (symbol->string x)) (lambda(x) 'fail)) "var")
 		(assert-equal? (<middle-arrow-var> (string->list "~<--{var}-->") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
 	)
+
+	(define-test test-<allignment>-1
+		(assert-equal? (<allignment> (string->list "~<--10--") (lambda (x y) x) (lambda(x) 'fail)) `(num-allign left 10))
+		(assert-equal? (<allignment> (string->list "~<--10--") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
+	)
 )
 
 (run-test-suite foo)

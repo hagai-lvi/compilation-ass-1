@@ -255,9 +255,6 @@ done))
 	done)
 )
 
-;test for <allignment>
-(<allignment> (string->list "~<--10--") (lambda (x y) `(match: ,(cadr x) left: ,y)) (lambda(x) 'fail))
-
 (define num-allign?
 	(lambda (x)
 		(eq? `num-allign (car x))
