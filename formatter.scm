@@ -39,11 +39,6 @@
        (*disj 2)
        done))
 
-(define <my-parser>
-	(new (*parser (char #\0))
-		 (*pack (lambda (_) 0))
-	done))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;  end of examples  ;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -58,23 +53,6 @@
  					(*pack-with
  					(lambda ( < e >) e))
  					done  ))))
-
-
-(define <left-bracket>
-	(new (*parser (char #\{  ))
-	done))
-
-(define <right-bracket>
-	(new (*parser (char #\}  ))
-	done))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;  EXPERIEMNTS  ;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define x (^<wrap> <left-bracket> <right-bracket>))
-(define y (x <nat>))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;  string defenition  ;;;;;
@@ -166,11 +144,6 @@ done))
 			*plus
 	done))
 
-;;;test for <lines>
-(<lines> (string->list "---") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
-
-
-
 ;identifies ----n--- and returns n
 (define <lines-nat-lines>
 	(new 	(*parser <lines>)
@@ -181,9 +154,6 @@ done))
 				(lambda ( _1 n _2 ) n))
 	done))
 
-;;;test for <lines-nat-lines>
-(<lines-nat-lines> (string->list "---5-") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
-
 ; identifies ~<-----n---- and returns n
 (define <left-arrow>
 	(new 	(*parser (char #\~))
@@ -193,8 +163,6 @@ done))
 			(*pack-with
 				(lambda ( _1 _2 n ) n))
 	done))
-;;;test for <left-arrow>
-(<left-arrow> (string->list "~<--10--") (lambda (x y) `(match: ,x left: ,y)) (lambda(x) 'fail))
 
 ; identifies ~-----n----> and returns n
 (define <right-arrow>
