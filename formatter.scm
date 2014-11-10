@@ -599,10 +599,6 @@ done))
 		*diff
 	done))
 
-(define formatter-no-args
-	(lambda (format-string)
-		`do_something))
-
 (define formatter-with-args
 	(lambda (format-string optional-list string-to-print)
 		(<formatter> (string->list format-string)
