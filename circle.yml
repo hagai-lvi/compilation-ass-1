@@ -1,5 +1,7 @@
 machine:
   pre:
+    - pwd
+    - ls -la
     - ./install-petite.sh
 
 test:
