@@ -1,0 +1,8 @@
+machine:
+  pre:
+    - ./compilation-ass-1/install-petite.sh
+
+test:
+  override:
+    - pwd
+    - ./run-test.sh

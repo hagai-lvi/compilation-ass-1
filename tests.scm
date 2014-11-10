@@ -172,6 +172,11 @@ so she brought the bitter butter back."
 		(assert-equal? (<allignment> (string->list "~<--{var1}--") (lambda (x y) x) (lambda(x) 'fail)) `(var-allign left var1))
 		(assert-equal? (<allignment> (string->list "~<--{var1}--") (lambda (x y) (list->string y)) (lambda(x) 'fail)) "")
 	)
+	
+	(define-test fail
+		(assert-equal? `a `(var-allign left var1))
+		
+	)
 )
 
 (run-test-suites foo)
