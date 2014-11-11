@@ -8,66 +8,66 @@
 
 (define-test-suite foo
 
-	(define-test test-one
+	(define-test formatter-test-1
 	(assert-equal? (formatter "~~abc") "~abc"))
 
-	(define-test mytest-2 
+	(define-test formatter-test-2 
 	(let ((env `((var1 "abc"))))
 		(assert-equal? (formatter "~~abc" env) "~abc"))
 	)
 
-	(define-test mytest-3 
+	(define-test formatter-test-3 
 	(let ((env `(
 	(a "a"))))
 		(assert-equal? (formatter "~{a}" env) "a")))
 
-	(define-test mytest-4
+	(define-test formatter-test-4
 	(let ((env `(
 	(a "a")
 	(ab "ab"))))
 		(assert-equal? (formatter "~{a} ~{ab}" env) "a ab")))
 	
-	(define-test mytest-5
+	(define-test formatter-test-5
 	(let ((env `(
 	(five 5)
 	(ab "ab"))))
 		(assert-equal? 	(formatter "~<--5--{ab}" env) 	"ab   ")))
 
-	(define-test mytest-6
+	(define-test formatter-test-6
 	(let ((env `(
 	(five 5)
 	(ab "ab"))))
 		(assert-equal? (formatter "~<--{five}--{ab}" env) "ab   ")))
 
-	(define-test mytest-7
+	(define-test formatter-test-7
 	(let ((env `(
 	(five 5)
 	(ab "ab"))))
 		(assert-equal? (formatter "~--5-->{ab}" env) "   ab")))
 
-	(define-test mytest-8
+	(define-test formatter-test-8
 	(let ((env `(
 	(five 5)
 	(ab "ab"))))
 		(assert-equal? (formatter "~--{five}-->{ab}" env) "   ab")))
 
-	(define-test mytest-9
+	(define-test formatter-test-9
 	(let ((env `(
 	(five 5)
 	(ab "ab"))))
 		(assert-equal? (formatter "~<--5-->{ab}" env) " ab  ")))
 
-	(define-test mytest-10
+	(define-test formatter-test-10
 	(let ((env `(
 	(five 5)
 	(ab "ab"))))
 		(assert-equal? (formatter "~<--{five}-->{ab}" env) " ab  ")))
 
-	(define-test mytest-11
+	(define-test formatter-test-11
 	(let ((env `((var1 "abc"))))
 		(assert-equal? (formatter "~~~{var1}" env) "~abc")))
 
-	(define-test mytest-12
+	(define-test formatter-test-12
 	(let ((env
 	'((betty "Betty")
 	(bought "bought")
@@ -94,7 +94,7 @@ but the butter was too bitter,
 so she brought the bitter butter back."
 				 )))
 
-	(define-test mytest-13
+	(define-test formatter-test-13
 	(let ((env
 	'((betty "Betty")
 	(bought "bought")
@@ -174,7 +174,7 @@ so she brought the bitter butter back."
 	)
 )
 
-(run-test-suites foo)
+;(run-test-suites foo)
 ;(run-test foo first-test)
 ;(run-tests foo test-one)
 
