@@ -14,8 +14,8 @@
 
 (define get-assoc (lambda(var-name var-map )
 	(let ((x (assoc var-name var-map)))
-		(if x
-		    x
+		(if (pair? x)
+		    (cadr x)
 		    (error `get-assoc (format "couldn't find association for variable name ~a" (symbol->string var-name))))
 		)))
 
@@ -136,7 +136,7 @@ done))
 (lambda(string-l l)
 (<sym> (string->list string-l)
  (lambda (e s)
-	      (cadr (assoc  e l)))
+	      (get-assoc e l))
 	    (lambda (w) `(failed with report: ,@w)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -386,11 +386,11 @@ done))
 			(*caten 2)
 			(*pack-with (lambda (allign var)
 							(lambda (var-map)
-								(let( 	(to-print (cadr (assoc  var var-map)))
+								(let( 	(to-print (get-assoc  var var-map))
 										(print-length
 											(if (num-allign? allign)
 										    (get-allign-num allign)
-										    (cadr (assoc (get-allign-var allign) var-map))))
+										    (get-assoc (get-allign-var allign) var-map)))
 										(direction (get-allign-direction allign)))
 								(allign-string to-print direction print-length)
 								))))
@@ -553,7 +553,7 @@ done))
 	(*parser <content>)
 	(*pack (lambda(ch) (lambda(l) ch)))
 	(*parser <variable>)
-	(*pack (lambda(ch)(lambda(l)(cadr (assoc ch l)))))
+	(*pack (lambda(ch)(lambda(l)(get-assoc ch l))))
     (*parser <comment>)
     (*pack (lambda(ch)(lambda(l)"")))
     (*parser <allignment-and-var>)
