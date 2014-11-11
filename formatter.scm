@@ -99,7 +99,7 @@
 (define <comment-string>
 (new (*parser <any-char>)
 	 (*parser (word "}}"))
-	 (*parser (word "{{"))
+	 (*parser (word "~{{"))
 	 (*disj 2)
 	 *diff
 	 *star
@@ -430,7 +430,8 @@ done))
   (new (*parser (word-ci "\\x"))
   		(*parser (word-ci "\\u"))
   		(*parser (word-ci "\\16#"))
-  		(*disj 3)	
+  		(*parser (word-ci "\\h"))
+  		(*disj 4)	
        (*parser <XXXX>)
        (*parser <XX>)
        (*disj 2)
@@ -466,7 +467,8 @@ done))
        (*parser (^<meta-char> "\\{" #\{))
        (*parser (^<meta-char> "\\}" #\}))
        (*parser (^<meta-char> "~~" #\~))
-       (*disj 18)
+       (*parser (^<meta-char> "\\\\" #\\))
+       (*disj 19)
        done))
 
 (define <string-char>
@@ -475,9 +477,9 @@ done))
        (*parser <any-char>)
 
        (*parser (char #\"))
-       (*parser (char #\\))
+      
        (*parser (char #\~))
-       (*disj 3)
+       (*disj 2)
 
        *diff
        (*disj 2)
