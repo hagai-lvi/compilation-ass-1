@@ -102,33 +102,6 @@
 <symbol>)))
 ;test (<sen> "{day-of-week}" `((day-of-week "Friday")(day-of month "never")))
 
-(define <comment-string>
-(new 
-	 (*parser <string-char>)
-	 (*parser (word "}}"))
-	 (*parser (word "~{{"))
-	
-	 (*disj 2)
-	 *diff	 
-	 (*parser <variable>)
-	 (*disj 2)
-	*star
-	 (*pack (lambda(ch)ch))
-	done))
-
-
-(define <comment>
-(new (*parser (word "~{{"))
-	(*parser <comment-string>) 
-	(*parser (word "}}"))
-	(*caten 3)
-	(*parser (word "~{{"))
-	(*parser <comment-string>)
-	(*delayed (lambda() <comment>))
-	(*parser (word "}}"))
-	(*caten 4)
-	(*disj 2)
-done))
 
 
 (define <sen>
@@ -515,18 +488,6 @@ done))
        done))
 
 
-(define <content>
-	(new (*parser <string>)
-		 (*parser <variable>)
-	*diff
-		(*parser <comment>)
-		*diff
-		(*parser <allignment>)
-		*diff
-		(*parser <allignment-variable>)
-		*diff
-	done))
-
 (define formatter-with-args
 	(lambda (format-string optional-list string-to-print)
 		(<formatter> (string->list format-string)
@@ -548,6 +509,50 @@ done))
 				(formatter-with-args (list->string s) optional-list `(,@string-to-print ,@ matching-list))))))))
 	    
           (lambda (w) `(failed with report: ,@w)))))
+
+
+
+(define <comment-string>
+(new 
+	 (*parser <string-char>)
+	 (*parser (word "}}"))
+	 (*parser (word "~{{"))
+	
+	 (*disj 2)
+	 *diff	 
+	 (*parser <variable>)
+	 (*disj 2)
+	*star
+	 (*pack (lambda(ch)ch))
+	done))
+
+
+(define <comment>
+(new (*parser (word "~{{"))
+	(*parser <comment-string>) 
+	(*parser (word "}}"))
+	(*caten 3)
+	(*parser (word "~{{"))
+	(*parser <comment-string>)
+	(*delayed (lambda() <comment>))
+	(*parser (word "}}"))
+	(*caten 4)
+	(*disj 2)
+done))
+
+
+(define <content>
+	(new (*parser <string>)
+		 (*parser <variable>)
+	*diff
+		(*parser <comment>)
+		*diff
+		(*parser <allignment>)
+		*diff
+		(*parser <allignment-variable>)
+		*diff
+	done))
+
 
 (define <formatter>
 	(new
