@@ -12,6 +12,12 @@
 			(formatter-with-args format-string '() #\nul)
 			(formatter-with-args format-string (car optional-list) #\nul))))
 
+(define get-assoc (lambda(var-name var-map )
+	(let ((x (assoc var-name var-map)))
+		(if x
+		    x
+		    (error `get-assoc (format "couldn't find association for variable name ~a" (symbol->string var-name))))
+		)))
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;  examples  ;;;;;
@@ -192,7 +198,7 @@ done))
 
 ;;;;;;;  allignment with variables  ;;;;;;;
 
-;identifies ----var--- and returns var
+;identifies ----{var}--- and returns var
 (define <lines-var-lines>
 	(new 	(*parser <lines>)
 			(*parser <allignment-variable>)
