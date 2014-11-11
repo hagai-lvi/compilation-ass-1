@@ -97,13 +97,18 @@
 ;test (<sen> "{day-of-week}" `((day-of-week "Friday")(day-of month "never")))
 
 (define <comment-string>
-(new (*parser <any-char>)
+(new 
+	 (*parser <any-char>)
 	 (*parser (word "}}"))
 	 (*parser (word "~{{"))
-	 (*disj 2)
-	 *diff
+	 (*parser (word "~"))
+	 (*parser <variable>)
+	 (*disj 4)
+	 *diff	 
+	 (*parser <variable>)
+	 	(*disj 2)
 	 *star
-	 (*pack (lambda(ch)(list->string ch)))
+	 (*pack (lambda(ch)ch))
 	done))
 
 
