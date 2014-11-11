@@ -4,5 +4,4 @@ machine:
 
 test:
   override:
-    - pwd
     - ./run-test.sh
