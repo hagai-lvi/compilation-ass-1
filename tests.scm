@@ -55,13 +55,13 @@
 	(let ((env `(
 	(five 5)
 	(ab "ab"))))
-		(assert-equal? (formatter "~<--5-->{ab}" env) "  ab ")))
+		(assert-equal? (formatter "~<--5-->{ab}" env) " ab  ")))
 
 	(define-test mytest-10
 	(let ((env `(
 	(five 5)
 	(ab "ab"))))
-		(assert-equal? (formatter "~<--{five}-->{ab}" env) "  ab ")))
+		(assert-equal? (formatter "~<--{five}-->{ab}" env) " ab  ")))
 
 	(define-test mytest-11
 	(let ((env `((var1 "abc"))))
