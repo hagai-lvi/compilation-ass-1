@@ -317,8 +317,21 @@ done))
 			((eq? `right direction) (cut-allign-right str output-length)))
 ))
 
+(define add-spaces-right
+	(lambda (str n) (if (= n 0)
+    	str
+    	(add-spaces-right (string-append str " ") (- n 1) ))   ))
+
+(define add-spaces-left
+	(lambda (str n) (if (= n 0)
+    	str
+    	(add-spaces-left (string-append " " str) (- n 1) ))   ))
+
 (define pad-allign-middle (lambda (str output-length)
-	(format (list->string `(#\~ ,@(string->list (number->string output-length)) ,@(string->list "@:<~a~>"))) str )
+	(let*  ((total-pad (- output-length (string-length str)))
+			(pad-left (floor (/ total-pad 2)))
+			(pad-right (- total-pad pad-left)))
+	(add-spaces-left (add-spaces-right str pad-right) pad-left))
 ))
 
 (define pad-allign-left (lambda (str output-length)
