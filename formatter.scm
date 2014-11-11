@@ -98,16 +98,15 @@
 
 (define <comment-string>
 (new 
-	 (*parser <any-char>)
+	 (*parser <string-char>)
 	 (*parser (word "}}"))
 	 (*parser (word "~{{"))
-	 (*parser (word "~"))
-	 (*parser <variable>)
-	 (*disj 4)
+	
+	 (*disj 2)
 	 *diff	 
 	 (*parser <variable>)
-	 	(*disj 2)
-	 *star
+	 (*disj 2)
+	*star
 	 (*pack (lambda(ch)ch))
 	done))
 
@@ -454,7 +453,6 @@ done))
 
 (define <string-meta-char>
   (new 
-       (*parser (^<meta-char> "\\\"" #\"))
        (*parser <hex-char>)
        (*parser (^<meta-char> "\\n" #\newline))
        (*parser (^<meta-char> "\\{newline}" #\newline))
@@ -473,7 +471,7 @@ done))
        (*parser (^<meta-char> "\\}" #\}))
        (*parser (^<meta-char> "~~" #\~))
        (*parser (^<meta-char> "\\\\" #\\))
-       (*disj 19)
+       (*disj 18)
        done))
 
 (define <string-char>
@@ -482,7 +480,6 @@ done))
        (*parser <any-char>)
 
        (*parser (char #\"))
-      
        (*parser (char #\~))
        (*disj 2)
 
