@@ -556,12 +556,10 @@ done))
 
 (define <error>
 (new   
-
        (*parser (char #\{))
        (*parser (char #\~))
        (*parser (char #\}))
        (*disj 3)
-
 	done))
 
 (define <formatter>
