@@ -471,9 +471,10 @@
 
        (*parser <any-char>)
 
-       (*parser (char #\"))
+       (*parser (char #\{))
        (*parser (char #\~))
-       (*disj 2)
+       (*parser (char #\}))
+       (*disj 3)
 
        *diff
        (*disj 2)
@@ -489,9 +490,9 @@
 
 
 (define formatter-with-args
-	(lambda (format-string optional-list string-to-print)
+	(trace-lambda first (format-string optional-list string-to-print)
 		(<formatter> (string->list format-string)
-	(lambda (e s)     
+	(trace-lambda second (e s)     
          (let* (
          	(matching (e optional-list ))
          	  (matching-list 
@@ -553,6 +554,13 @@ done))
 		*diff
 	done))
 
+(define <error>
+(new   
+       (*parser (char #\{))
+       (*parser (char #\~))
+       (*parser (char #\}))
+       (*disj 3)
+	done))
 
 (define <formatter>
 	(new
@@ -566,6 +574,7 @@ done))
     (*pack (lambda(ch)(lambda(l)"")))
     (*parser <allignment-and-var>)
     (*pack (lambda(token)(lambda(var-map)(token var-map))))
-
-	(*disj 4)
+    (*parser <error>)
+    (*pack (lambda(ch)(lambda(_)(error `illigal-char (format "illigal-char was found ~s" ch)))))
+	(*disj 5)
 done))
