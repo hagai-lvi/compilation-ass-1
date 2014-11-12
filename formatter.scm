@@ -496,18 +496,16 @@
          (let* (
          	(matching (e optional-list ))
          	  (matching-list 
-         	  	(if (not matching) matching 
          	  		(if(number? matching)
          	  			(string->list (number->string matching))
-         				(string->list matching)))))	
-         (if (not matching-list) `(couldnt find variable) 
+         				(string->list matching))))	
          (cond  
            
            ((and (null? s)(not(char? string-to-print))) (list->string `(,@string-to-print ,@ matching-list)))
 	   ((and (null? s)(char? string-to-print))matching)  
            (else(if (char? string-to-print)	
 				(formatter-with-args (list->string s) optional-list  matching-list)
-				(formatter-with-args (list->string s) optional-list `(,@string-to-print ,@ matching-list))))))))
+				(formatter-with-args (list->string s) optional-list `(,@string-to-print ,@ matching-list)))))))
 	    
           (lambda (w) `(failed with report: ,@w)))))
 
@@ -567,9 +565,7 @@ done))
 	(*parser <content>)
 	(*pack (lambda(ch) (lambda(l) ch)))
 	(*parser <variable>)
-	(*pack (lambda(ch)(lambda(l)(let ((value (assoc ch l)))
-		(if value
-			(cadr value)value)))))
+	(*pack (lambda(ch)(lambda(l)(get-assoc ch l))))
     (*parser <comment>)
     (*pack (lambda(ch)(lambda(l)"")))
     (*parser <allignment-and-var>)
