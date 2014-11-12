@@ -262,7 +262,7 @@ so she brought the bitter butter back."
 	(tilde "~")
 	(left-arrow "<")
 	(right-arrow ">"))))
-		(assert-equal? (formatter "~~~{left-arrow}--{five}--{ab}" env) "~<--{five}--{ab}")))
+		(assert-equal? (formatter "~~~{left-arrow}--\\{five\\}--\\{ab\\}" env) "~<--{five}--{ab}")))
 
 	(define-test formatter-test-22
 	(let ((env `(
@@ -290,7 +290,7 @@ so she brought the bitter butter back."
 	(tilde "~")
 	(left-arrow "<")
 	(right-arrow ">"))))
-		(assert-equal? (formatter (formatter "~~~{left-arrow}--{five}--{ab}" env) env) "ab   ")))
+		(assert-equal? (formatter (formatter "~~~{left-arrow}--\\{five\\}--\\{ab\\}" env) env) "ab   ")))
 )
 
 ;(run-test-suites foo)
@@ -320,3 +320,4 @@ so she brought the bitter butter back."
 
 
 
+<string>
