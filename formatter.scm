@@ -578,3 +578,4 @@ done))
     (*pack (lambda(ch)(lambda(_)(error `illigal-char (format "illigal-char was found ~s" ch)))))
 	(*disj 5)
 done))
+
